@@ -1,0 +1,3 @@
+- Run using "npm run dev"
+- Write shader in src/lib/assets/shaders/shader.frag
+- Save
