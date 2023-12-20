@@ -35,6 +35,8 @@
 		vertexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+		gl.enable(gl.BLEND);
+		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 		start = performance.now();
 
 		window.addEventListener('resize', resizeCanvas);
@@ -52,7 +54,8 @@
 
 		const fs = gl.createShader(gl.FRAGMENT_SHADER);
 		if (!fs) {
-			alert('Could not create fragment shader');
+			console.error('Could not create fragment shader');
+			gl.deleteShader(fs);
 			return;
 		}
 		gl.shaderSource(fs, frag);
@@ -64,7 +67,8 @@
 
 		const vs = gl.createShader(gl.VERTEX_SHADER);
 		if (!vs) {
-			alert('Could not create vertex shader');
+			console.error('Could not create vertex shader');
+			gl.deleteShader(vs);
 			return;
 		}
 		gl.shaderSource(vs, vert);
@@ -80,9 +84,10 @@
 		}
 		program = gl.createProgram();
 		if (!program) {
-			alert('Could not create shader program');
+			console.error('Could not create shader program');
 			return;
 		}
+
 		gl.attachShader(program, fs);
 		gl.attachShader(program, vs);
 		gl.linkProgram(program);
@@ -102,7 +107,7 @@
 	function render() {
 		if (!(canvas && gl && program)) return;
 
-		gl.clearColor(0, 0, 0, 1);
+		gl.clearColor(0, 0, 0, 0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		gl.useProgram(program);
